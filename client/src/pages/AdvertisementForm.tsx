@@ -134,23 +134,6 @@ function AdvertisementForm() {
 
   const generateRequiredMessage = (label: string) => `${label} is required`
 
-  const fieldLabels = {
-    area: 'Area',
-    brand: 'Brand',
-    cost: 'Cost',
-    description: 'Description',
-    experience: 'Experience',
-    image: 'Image URL',
-    location: 'Location',
-    model: 'Model',
-    name: 'Title',
-    price: 'Price',
-    propertyType: 'Property Type',
-    rooms: 'Number of Rooms',
-    serviceType: 'Service Type',
-    year: 'Year',
-  }
-
   const generalFieldConfigurations = [
     { label: 'Title', name: 'name', rules: { required: true }, type: 'text' },
     { label: 'Description', name: 'description', rules: { required: true }, type: 'text' },
@@ -158,24 +141,46 @@ function AdvertisementForm() {
     { label: 'Image URL', name: 'image', rules: { required: false }, type: 'text' },
   ] as const
 
+  const propertyTypeOptions = ['Apartment', 'House', 'Cottage']
+  const brandOptions = ['Toyota', 'BMW', 'Audi']
+  const serviceTypeOptions = ['Repair', 'Cleaning', 'Delivery']
+
   const fieldConfigurations = {
     'Авто': [
-      { label: 'Brand', name: 'brand', rules: { required: true }, type: 'text' },
+      {
+        label: 'Brand',
+        name: 'brand',
+        options: brandOptions,
+        rules: { required: true },
+        type: 'select',
+      },
       { label: 'Model', name: 'model', rules: { required: true }, type: 'text' },
       { label: 'Year', name: 'year', rules: { max: new Date().getFullYear(), min: 1900, required: true }, type: 'number' },
-      { label: 'Mileage (km)', name: 'mileage', rules: {}, type: 'number' },
+      { label: 'Mileage (km)', name: 'mileage', rules: {required: false}, type: 'number' },
     ],
     'Недвижимость': [
-      { label: 'Property Type', name: 'propertyType', rules: { required: true }, type: 'text' },
+      {
+        label: 'Property Type',
+        name: 'propertyType',
+        options: propertyTypeOptions,
+        rules: { required: true },
+        type: 'select',
+      },
       { label: 'Area (m²)', name: 'area', rules: { min: 1, required: true }, type: 'number' },
       { label: 'Number of Rooms', name: 'rooms', rules: { min: 1, required: true }, type: 'number' },
       { label: 'Price (₽)', name: 'price', rules: { min: 1, required: true }, type: 'number' },
     ],
     'Услуги': [
-      { label: 'Service Type', name: 'serviceType', rules: { required: true }, type: 'text' },
+      {
+        label: 'Service Type',
+        name: 'serviceType',
+        options: serviceTypeOptions,
+        rules: { required: true },
+        type: 'select',
+      },
       { label: 'Experience (years)', name: 'experience', rules: { min: 0, required: true }, type: 'number' },
       { label: 'Cost (₽)', name: 'cost', rules: { min: 1, required: true }, type: 'number' },
-      { label: 'Work Schedule', name: 'workSchedule', rules: {}, type: 'text' },
+      { label: 'Work Schedule', name: 'workSchedule', rules: {required: false}, type: 'text' },
     ],
   } as const
 
@@ -187,7 +192,7 @@ function AdvertisementForm() {
           control={control}
           rules={{
             ...rules,
-            required: rules.required ? generateRequiredMessage(fieldLabels[name]) : false,
+            required: rules.required ? generateRequiredMessage(label) : false,
           }}
           render={({ field, fieldState }) => (
             <TextField
@@ -206,25 +211,41 @@ function AdvertisementForm() {
 
   const renderCategoryFields = () => {
     const fields = fieldConfigurations[selectedType] || []
-    return fields.map(({ name, label, type, rules }) => (
+    return fields.map(({ name, label, type, rules, ...rest }) => (
       <Grid item xs={12} sm={type === 'number' ? 6 : 12} key={name}>
         <Controller
           name={name}
           control={control}
           rules={{
             ...rules,
-            //@ts-ignore
-            required: rules.required ? generateRequiredMessage(fieldLabels[name]) : false,
+            required: rules.required ? generateRequiredMessage(label) : false,
           }}
           render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              type={type}
-              label={label}
-              fullWidth
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-            />
+            type === 'select' ? (
+              <FormControl fullWidth error={!!fieldState.error}>
+                <InputLabel>{label}</InputLabel>
+                <Select {...field} label={label}>
+                  {/*@ts-ignore*/}
+                  {rest.options?.map((option:string) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {fieldState.error && (
+                  <FormHelperText error>{fieldState.error.message}</FormHelperText>
+                )}
+              </FormControl>
+            ) : (
+              <TextField
+                {...field}
+                type={type}
+                label={label}
+                fullWidth
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
+            )
           )}
         />
       </Grid>
