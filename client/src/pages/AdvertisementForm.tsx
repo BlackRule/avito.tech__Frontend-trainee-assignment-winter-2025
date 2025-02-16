@@ -155,7 +155,7 @@ function AdvertisementForm() {
     { label: 'Title', name: 'name', rules: { required: true }, type: 'text' },
     { label: 'Description', name: 'description', rules: { required: true }, type: 'text' },
     { label: 'Location', name: 'location', rules: { required: true }, type: 'text' },
-    { label: 'Image URL', name: 'image', rules: { required: true }, type: 'text' },
+    { label: 'Image URL', name: 'image', rules: { required: false }, type: 'text' },
   ] as const
 
   const fieldConfigurations = {
