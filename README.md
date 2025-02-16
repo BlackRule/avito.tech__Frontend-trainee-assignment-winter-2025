@@ -1,8 +1,8 @@
 ## инструкция по запуску проекта
-docker compose build & docker compose up
-или
-pnpm run start  в папке server 
-pnpm run dev  в папке client
+docker compose build & docker compose up  
+или  
+pnpm run start  в папке server  
+pnpm run dev  в папке client  
 ## обоснование выбора необязательных технологий
 pnpm ибо создает ссылки на пакеты в node_modules, а не копирует их. Это позволяет экономить место на диске.  Да и он гораздо быстрее npm'а
 mui ибо это устоявшийся фреймворк для создания адаптивных сайтов с codemod'ами если они меняют API.  
