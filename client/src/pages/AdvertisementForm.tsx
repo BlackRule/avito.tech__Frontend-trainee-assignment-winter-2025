@@ -12,8 +12,8 @@ import {
   FormHelperText,
 } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 
 import { useForm, Controller } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -213,6 +213,7 @@ function AdvertisementForm() {
           control={control}
           rules={{
             ...rules,
+            //@ts-ignore
             required: rules.required ? generateRequiredMessage(fieldLabels[name]) : false,
           }}
           render={({ field, fieldState }) => (

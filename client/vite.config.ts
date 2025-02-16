@@ -4,7 +4,6 @@ import {defineConfig} from 'vite'
 // https://vite.dev/config/
 
 const c = {
-  base: '/2024-2-VK-EDU-Frontend-I-Chernovalov',
   css: {
     preprocessorOptions: {
       scss: {
@@ -16,15 +15,14 @@ const c = {
   resolve: {
     alias: {
       'components': '/src/components',
-      'screens': '/src/screens',
+      'pages': '/src/pages',
       '~': '/src',
     },
   },
 
 }
-export default defineConfig(({command}) => {
+export default defineConfig(({command}:{command:string}) => {
   if (command === 'serve') {
-    c.base = ''
     return c
   } else {
     // command === 'build'
