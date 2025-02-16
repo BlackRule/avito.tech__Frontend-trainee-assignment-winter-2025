@@ -19,7 +19,15 @@ const c = {
       '~': '/src',
     },
   },
-
+  server: {
+    proxy: {
+      '/server': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path:string) => path.replace(/^\/server/, ''),
+      },
+    },
+  },
 }
 export default defineConfig(({command}:{command:string}) => {
   if (command === 'serve') {

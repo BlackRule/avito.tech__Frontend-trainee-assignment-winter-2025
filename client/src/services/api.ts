@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { Advertisement } from '~/types/advertisement'
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:3000',
+  baseURL: '/server',
 })
 
 export const getAdvertisements = async () => {
